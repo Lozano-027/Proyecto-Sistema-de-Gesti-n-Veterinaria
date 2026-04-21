@@ -1,0 +1,134 @@
+// prisma/schema.prisma
+// Sistema de Gestión Veterinaria
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Rol {
+  ADMIN
+  VETERINARIO
+}
+
+enum EstadoCita {
+  PENDIENTE
+  CONFIRMADA
+  EN_CURSO
+  COMPLETADA
+  CANCELADA
+}
+
+// ─── Modelos ──────────────────────────────────────────────────────────────────
+
+model Usuario {
+  id          Int      @id @default(autoincrement())
+  nombre      String
+  correo      String   @unique
+  contrasena  String
+  rol         Rol      @default(VETERINARIO)
+  activo      Boolean  @default(true)
+  creadoEn    DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  citas       Cita[]
+
+  @@map("usuarios")
+}
+
+model Propietario {
+  id          Int      @id @default(autoincrement())
+  nombres     String
+  apellidos   String
+  telefono    String
+  correo      String   @unique
+  direccion   String?
+  activo      Boolean  @default(true)
+  creadoEn    DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  mascotas    Mascota[]
+
+  @@map("propietarios")
+}
+
+model Mascota {
+  id              Int      @id @default(autoincrement())
+  nombre          String
+  especie         String
+  raza            String?
+  fechaNacimiento DateTime?
+  activo          Boolean  @default(true)
+  creadoEn        DateTime @default(now())
+  actualizadoEn   DateTime @updatedAt
+
+  propietarioId   Int
+  propietario     Propietario @relation(fields: [propietarioId], references: [id])
+
+  citas           Cita[]
+  historiales     HistorialClinico[]
+
+  @@map("mascotas")
+}
+
+model Cita {
+  id          Int        @id @default(autoincrement())
+  fecha       DateTime
+  hora        String
+  motivo      String
+  estado      EstadoCita @default(PENDIENTE)
+  notas       String?
+  creadoEn    DateTime   @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  mascotaId   Int
+  mascota     Mascota  @relation(fields: [mascotaId], references: [id])
+
+  usuarioId   Int
+  usuario     Usuario  @relation(fields: [usuarioId], references: [id])
+
+  tratamientos Tratamiento[]
+
+  @@map("citas")
+}
+
+model HistorialClinico {
+  id            Int      @id @default(autoincrement())
+  fecha         DateTime
+  diagnostico   String
+  observaciones String?
+  creadoEn      DateTime @default(now())
+  actualizadoEn DateTime @updatedAt
+
+  mascotaId     Int
+  mascota       Mascota @relation(fields: [mascotaId], references: [id])
+
+  tratamientos  Tratamiento[]
+
+  @@unique([mascotaId, fecha])
+  @@map("historiales_clinicos")
+}
+
+model Tratamiento {
+  id                 Int      @id @default(autoincrement())
+  medicamento        String
+  dosis              String
+  duracion           String
+  indicaciones       String?
+  creadoEn           DateTime @default(now())
+  actualizadoEn      DateTime @updatedAt
+
+  historialClinicoId Int?
+  historialClinico   HistorialClinico? @relation(fields: [historialClinicoId], references: [id])
+
+  citaId             Int?
+  cita               Cita? @relation(fields: [citaId], references: [id])
+
+  @@map("tratamientos")
+}
