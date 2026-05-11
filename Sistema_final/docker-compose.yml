@@ -1,0 +1,83 @@
+# ============================================================
+# Docker Compose — Sistema de Gestión Veterinaria
+# ============================================================
+# Levanta 3 servicios:
+#   1. db       → PostgreSQL 16 (puerto 5432)
+#   2. backend  → NestJS API    (puerto 3001)
+#   3. frontend → Next.js App   (puerto 3000)
+#
+# Uso:
+#   docker compose up -d          → levantar todo en segundo plano
+#   docker compose down           → detener y eliminar contenedores
+#   docker compose logs -f backend → ver logs en tiempo real
+#
+# Variables de entorno: se leen del archivo .env en la raíz.
+# ============================================================
+
+services:
+  # ── Base de datos PostgreSQL ──────────────────────────────
+  db:
+    image: postgres:16-alpine        # Imagen oficial ligera de PostgreSQL 16
+    container_name: veterinaria_db
+    restart: unless-stopped           # Se reinicia salvo que se detenga manualmente
+    env_file:
+      - .env                          # Carga DB_USER, DB_PASSWORD, DB_NAME
+    environment:
+      POSTGRES_USER: ${DB_USER}       # Usuario de la BD
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}         # Nombre de la BD que se crea al iniciar
+    ports:
+      - '5432:5432'                   # Expone el puerto para herramientas locales (pgAdmin, etc.)
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Volumen persistente para los datos
+    healthcheck:                      # Verifica que PostgreSQL esté listo antes de arrancar el backend
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER} -d ${DB_NAME}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ── Backend NestJS ────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend              # Directorio del Dockerfile del backend
+      dockerfile: Dockerfile
+    container_name: veterinaria_backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      # URL de conexión a PostgreSQL usando el nombre del servicio "db" como host
+      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+      PORT: 3001
+    ports:
+      - '3001:3001'                   # API REST accesible en http://localhost:3001
+    depends_on:
+      db:
+        condition: service_healthy    # Espera a que el healthcheck de "db" pase
+    volumes:
+      - ./backend:/app                # Hot-reload: cambios locales se reflejan al instante
+      - /app/node_modules             # Evita sobreescribir node_modules del contenedor
+
+  # ── Frontend Next.js ──────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: veterinaria_frontend
+    restart: unless-stopped
+    environment:
+      # URL del backend que el navegador usará para llamadas fetch
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+    ports:
+      - '3000:3000'                   # Aplicación web en http://localhost:3000
+    depends_on:
+      - backend                       # Inicia después del backend (sin healthcheck)
+    volumes:
+      - ./frontend:/app               # Hot-reload para desarrollo frontend
+      - /app/node_modules
+      - /app/.next                    # Evita conflictos con la carpeta de build
+
+# ── Volúmenes con nombre ─────────────────────────────────────
+# Persisten los datos de PostgreSQL entre reinicios del contenedor.
+volumes:
+  postgres_data:

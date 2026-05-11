@@ -1,0 +1,167 @@
+// ============================================================
+// ESQUEMA DE BASE DE DATOS — PRISMA ORM
+// ============================================================
+//
+// Sistema de Gestión Veterinaria — define toda la estructura
+// de la base de datos PostgreSQL.
+//
+// Prisma lo usa para:
+//   1. Generar las migraciones SQL (npx prisma migrate dev)
+//   2. Generar el cliente TypeScript (npx prisma generate)
+//   3. Validar las consultas en tiempo de compilación
+//
+// DIAGRAMA DE RELACIONES (ER simplificado):
+//
+//   Propietario        ──1:N──> Mascota
+//   Mascota            ──1:N──> Cita
+//   Mascota            ──1:N──> HistorialClinico
+//   Usuario            ──1:N──> Cita      (veterinario que atiende)
+//   Cita               ──1:N──> Tratamiento
+//   HistorialClinico   ──1:N──> Tratamiento
+//
+// CONVENCIONES:
+//   @id @default(autoincrement())  → Clave primaria autoincremental
+//   @unique                        → Restricción UNIQUE (no duplicados)
+//   @default(now())                → Valor por defecto: fecha actual
+//   @updatedAt                     → Se actualiza automáticamente en cada UPDATE
+//   @@map("nombre_tabla")          → Nombre real de la tabla en PostgreSQL
+//   @@unique([campo1, campo2])     → Restricción UNIQUE compuesta
+//
+// NOTA IMPORTANTE: Este proyecto NO incluye autenticación JWT.
+//   El modelo Usuario representa al personal veterinario, pero NO se almacenan
+//   contraseñas ni se gestiona autenticación. Es solo para asignar el veterinario
+//   responsable de cada cita.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── USUARIO ─────────────────────────────────────────────────
+// Representa al personal de la veterinaria (veterinarios, administradores).
+// Se usa principalmente para asociar quién atiende cada cita.
+// NO incluye contraseña porque NO hay autenticación.
+//
+// Roles posibles (string libre, validado en el DTO):
+//   - "veterinario"
+//   - "admin"
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nombre    String
+  correo    String   @unique           // Ej: "dr.lopez@vet.co"
+  rol       String                     // "veterinario" | "admin"
+  citas     Cita[]                     // Citas que ha atendido este veterinario
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("usuarios")
+}
+
+// ── PROPIETARIO ─────────────────────────────────────────────
+// Cliente de la veterinaria. Dueño de una o más mascotas.
+// Campo UNIQUE: correo
+model Propietario {
+  id         Int        @id @default(autoincrement())
+  nombres    String
+  apellidos  String
+  telefono   String
+  correo     String     @unique
+  direccion  String
+  mascotas   Mascota[]                  // Un propietario puede tener N mascotas
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  @@map("propietarios")
+}
+
+// ── MASCOTA ─────────────────────────────────────────────────
+// Animal registrado en la veterinaria.
+// FK: propietarioId (a quién pertenece)
+model Mascota {
+  id              Int                @id @default(autoincrement())
+  nombre          String                          // Ej: "Firulais"
+  especie         String                          // Ej: "Perro", "Gato"
+  raza            String                          // Ej: "Labrador"
+  fechaNacimiento DateTime
+  propietarioId   Int                             // FK → Propietario.id
+  propietario     Propietario        @relation(fields: [propietarioId], references: [id])
+  citas           Cita[]                          // Citas de esta mascota
+  historiales     HistorialClinico[]              // Historiales clínicos
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
+
+  @@map("mascotas")
+}
+
+// ── CITA ────────────────────────────────────────────────────
+// Cita médica entre una mascota y un veterinario en una fecha/hora.
+//
+// estado: "programada" | "completada" | "cancelada"
+//
+// VALIDACIÓN DE NEGOCIO (en el Service, no en Prisma):
+//   No puede haber dos citas para el mismo veterinario en la misma fecha+hora.
+//   No puede haber dos citas para la misma mascota en la misma fecha+hora.
+model Cita {
+  id           Int           @id @default(autoincrement())
+  mascotaId    Int
+  usuarioId    Int                                // FK → Usuario.id (veterinario)
+  fecha        DateTime                           // Solo la parte de fecha (YYYY-MM-DD)
+  hora         String                             // Hora en formato "HH:mm" (ej: "14:30")
+  motivo       String
+  estado       String        @default("programada")
+  mascota      Mascota       @relation(fields: [mascotaId], references: [id])
+  usuario      Usuario       @relation(fields: [usuarioId], references: [id])
+  tratamientos Tratamiento[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@map("citas")
+}
+
+// ── HISTORIAL CLÍNICO ───────────────────────────────────────
+// Registro clínico de una mascota en una fecha específica.
+//
+// @@unique([mascotaId, fecha]) → No puede haber dos historiales
+//   de la misma mascota en la misma fecha.
+model HistorialClinico {
+  id            Int           @id @default(autoincrement())
+  mascotaId     Int
+  fecha         DateTime
+  diagnostico   String
+  observaciones String?                         // Nullable
+  mascota       Mascota       @relation(fields: [mascotaId], references: [id])
+  tratamientos  Tratamiento[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  @@unique([mascotaId, fecha])
+  @@map("historial_clinico")
+}
+
+// ── TRATAMIENTO ─────────────────────────────────────────────
+// Medicamento/procedimiento prescrito en una cita y/o asociado
+// a un historial clínico.
+//
+// Ambas FKs son opcionales para permitir tratamientos:
+//   - Solo asociados a la cita (sin historial aún)
+//   - Solo asociados al historial (registro retrospectivo)
+//   - Asociados a ambos (caso típico)
+model Tratamiento {
+  id                  Int               @id @default(autoincrement())
+  historialClinicoId  Int?
+  citaId              Int?
+  medicamento         String
+  dosis               String                              // Ej: "1 tableta cada 8h"
+  duracion            String                              // Ej: "7 días"
+  indicaciones        String?
+  historialClinico    HistorialClinico? @relation(fields: [historialClinicoId], references: [id])
+  cita                Cita?             @relation(fields: [citaId], references: [id])
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  @@map("tratamientos")
+}

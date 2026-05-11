@@ -1,0 +1,26 @@
+# Environment
+.env
+
+# Node
+node_modules/
+dist/
+build/
+.next/
+
+# TypeScript build cache
+*.tsbuildinfo
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Prisma (migrations should be tracked)
+# backend/prisma/migrations/
