@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="720" viewBox="0 0 680 720">
+<style>
+.ts { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: #4a4a4a; }
+.th { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; font-weight: 500; fill: #1a1a1a; }
+.title-main { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: #1a1a1a; }
+</style>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<text class="title-main" x="340" y="30" text-anchor="middle">C4 Nivel 3 — Componentes del backend</text>
+<text class="ts" x="340" y="50" text-anchor="middle">Backend NestJS · arquitectura por capas</text>
+
+<rect x="40" y="75" width="600" height="100" rx="8" fill="none" stroke="#888780" stroke-width="0.5" stroke-dasharray="4 3"/>
+<text class="ts" x="55" y="95" fill="#5F5E5A">Modulos transversales</text>
+
+<rect x="60" y="105" width="170" height="55" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+<text class="th" x="145" y="128" text-anchor="middle" fill="#3C3489">PrismaModule</text>
+<text class="ts" x="145" y="148" text-anchor="middle" fill="#534AB7">@Global — acceso BD</text>
+
+<rect x="255" y="105" width="170" height="55" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+<text class="th" x="340" y="128" text-anchor="middle" fill="#3C3489">HttpExceptionFilter</text>
+<text class="ts" x="340" y="148" text-anchor="middle" fill="#534AB7">Formato uniforme errores</text>
+
+<rect x="450" y="105" width="170" height="55" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+<text class="th" x="535" y="128" text-anchor="middle" fill="#3C3489">ResponseInterceptor</text>
+<text class="ts" x="535" y="148" text-anchor="middle" fill="#534AB7">Envuelve respuestas OK</text>
+
+<rect x="40" y="200" width="600" height="380" rx="8" fill="none" stroke="#888780" stroke-width="0.5" stroke-dasharray="4 3"/>
+<text class="ts" x="55" y="220" fill="#5F5E5A">Modulos del dominio · 7 modulos siguen el patron Controller -- Service -- Repository</text>
+
+<rect x="60" y="240" width="120" height="50" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+<text class="th" x="120" y="263" text-anchor="middle" fill="#085041">Usuarios</text>
+<text class="ts" x="120" y="280" text-anchor="middle" fill="#0F6E56">Personal</text>
+
+<rect x="195" y="240" width="120" height="50" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+<text class="th" x="255" y="263" text-anchor="middle" fill="#085041">Propietarios</text>
+<text class="ts" x="255" y="280" text-anchor="middle" fill="#0F6E56">Clientes</text>
+
+<rect x="330" y="240" width="120" height="50" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+<text class="th" x="390" y="263" text-anchor="middle" fill="#085041">Mascotas</text>
+<text class="ts" x="390" y="280" text-anchor="middle" fill="#0F6E56">Pacientes</text>
+
+<rect x="465" y="240" width="120" height="50" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+<text class="th" x="525" y="263" text-anchor="middle" fill="#085041">Citas</text>
+<text class="ts" x="525" y="280" text-anchor="middle" fill="#0F6E56">Disponibilidad</text>
+
+<rect x="60" y="310" width="170" height="50" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+<text class="th" x="145" y="333" text-anchor="middle" fill="#085041">HistorialClinico</text>
+<text class="ts" x="145" y="350" text-anchor="middle" fill="#0F6E56">Unico: mascota+fecha</text>
+
+<rect x="245" y="310" width="170" height="50" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+<text class="th" x="330" y="333" text-anchor="middle" fill="#085041">Tratamientos</text>
+<text class="ts" x="330" y="350" text-anchor="middle" fill="#0F6E56">Asocia cita o historial</text>
+
+<rect x="430" y="310" width="170" height="50" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+<text class="th" x="515" y="333" text-anchor="middle" fill="#085041">Reportes</text>
+<text class="ts" x="515" y="350" text-anchor="middle" fill="#0F6E56">Filtros y agregados</text>
+
+<rect x="100" y="410" width="160" height="50" rx="6" fill="#FAECE7" stroke="#993C1D" stroke-width="1"/>
+<text class="th" x="180" y="433" text-anchor="middle" fill="#712B13">Controller</text>
+<text class="ts" x="180" y="450" text-anchor="middle" fill="#993C1D">HTTP + DTOs</text>
+
+<rect x="280" y="410" width="160" height="50" rx="6" fill="#FAECE7" stroke="#993C1D" stroke-width="1"/>
+<text class="th" x="360" y="433" text-anchor="middle" fill="#712B13">Service</text>
+<text class="ts" x="360" y="450" text-anchor="middle" fill="#993C1D">Reglas de negocio</text>
+
+<rect x="460" y="410" width="160" height="50" rx="6" fill="#FAECE7" stroke="#993C1D" stroke-width="1"/>
+<text class="th" x="540" y="433" text-anchor="middle" fill="#712B13">Repository</text>
+<text class="ts" x="540" y="450" text-anchor="middle" fill="#993C1D">Consultas Prisma</text>
+
+<line x1="260" y1="435" x2="278" y2="435" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<line x1="440" y1="435" x2="458" y2="435" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<rect x="200" y="510" width="280" height="50" rx="6" fill="#FAEEDA" stroke="#854F0B" stroke-width="1"/>
+<text class="th" x="340" y="533" text-anchor="middle" fill="#633806">PrismaClient -- PostgreSQL</text>
+<text class="ts" x="340" y="550" text-anchor="middle" fill="#854F0B">Tipado fuerte · migraciones · transacciones</text>
+
+<line x1="540" y1="460" x2="420" y2="508" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+<rect x="40" y="600" width="600" height="100" rx="6" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+<text class="th" x="340" y="625" text-anchor="middle" fill="#2C2C2A">Reglas de negocio destacadas</text>
+<text class="ts" x="340" y="648" text-anchor="middle" fill="#444441">Citas: no permite dos citas activas para el mismo veterinario en igual fecha+hora</text>
+<text class="ts" x="340" y="666" text-anchor="middle" fill="#444441">Historial: restriccion de unicidad (mascotaId, fecha)</text>
+<text class="ts" x="340" y="684" text-anchor="middle" fill="#444441">Tratamiento: requiere asociacion a una cita o a un historial</text>
+</svg>

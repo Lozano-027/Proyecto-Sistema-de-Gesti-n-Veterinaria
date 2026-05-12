@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="480" viewBox="0 0 680 480">
+<style>
+.ts { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: #4a4a4a; }
+.th { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; font-weight: 500; fill: #1a1a1a; }
+.title-main { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: #1a1a1a; }
+</style>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<text class="title-main" x="340" y="35" text-anchor="middle">C4 Nivel 1 — Contexto del sistema</text>
+<text class="ts" x="340" y="55" text-anchor="middle">Sistema de Gestion Veterinaria</text>
+
+<ellipse cx="160" cy="160" rx="80" ry="50" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+<text class="th" x="160" y="155" text-anchor="middle" fill="#0C447C">Veterinario</text>
+<text class="ts" x="160" y="175" text-anchor="middle" fill="#185FA5">Personal medico</text>
+
+<ellipse cx="520" cy="160" rx="80" ry="50" fill="#E6F1FB" stroke="#185FA5" stroke-width="1"/>
+<text class="th" x="520" y="155" text-anchor="middle" fill="#0C447C">Administrador</text>
+<text class="ts" x="520" y="175" text-anchor="middle" fill="#185FA5">Personal de gestion</text>
+
+<rect x="180" y="280" width="320" height="120" rx="12" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+<text class="th" x="340" y="320" text-anchor="middle" fill="#3C3489">Sistema de Gestion Veterinaria</text>
+<text class="ts" x="340" y="345" text-anchor="middle" fill="#534AB7">Gestiona propietarios, mascotas,</text>
+<text class="ts" x="340" y="362" text-anchor="middle" fill="#534AB7">citas, historiales y tratamientos</text>
+<text class="ts" x="340" y="385" text-anchor="middle" fill="#534AB7">[Web Application]</text>
+
+<line x1="180" y1="210" x2="270" y2="280" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text class="ts" x="180" y="250" text-anchor="middle">Registra citas,</text>
+<text class="ts" x="180" y="265" text-anchor="middle">historiales y tratamientos</text>
+
+<line x1="500" y1="210" x2="410" y2="280" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text class="ts" x="510" y="250" text-anchor="middle">Administra propietarios,</text>
+<text class="ts" x="510" y="265" text-anchor="middle">mascotas y reportes</text>
+
+<rect x="200" y="430" width="280" height="30" rx="6" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+<text class="ts" x="340" y="450" text-anchor="middle" fill="#444441">Alcance: gestion interna de una clinica veterinaria</text>
+</svg>

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="760" viewBox="0 0 680 760">
+<style>
+.ts { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; font-weight: 400; fill: #4a4a4a; }
+.th { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; font-weight: 500; fill: #1a1a1a; }
+.title-main { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 600; fill: #1a1a1a; }
+.code { font-family: 'Consolas', 'Courier New', monospace; font-size: 11px; fill: #1a1a1a; }
+</style>
+<defs>
+<marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker>
+</defs>
+
+<text class="title-main" x="340" y="30" text-anchor="middle">C4 Nivel 4 — Codigo del frontend</text>
+<text class="ts" x="340" y="50" text-anchor="middle">Caso: estructura de una pagina CRUD (propietarios)</text>
+
+<!-- PropietariosPage -->
+<rect x="40" y="80" width="600" height="180" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1"/>
+<text class="th" x="60" y="105" fill="#3C3489">PropietariosPage</text>
+<text class="ts" x="60" y="123" fill="#534AB7">app/(dashboard)/propietarios/page.tsx — Client Component</text>
+<line x1="60" y1="135" x2="620" y2="135" stroke="#534AB7" stroke-width="0.3" opacity="0.4"/>
+<text class="ts" x="60" y="155">Estado React (useState):</text>
+<text class="code" x="80" y="173">— propietarios: Propietario[]</text>
+<text class="code" x="80" y="190">— form, editingId, error, loading, showForm</text>
+<text class="ts" x="60" y="213">Metodos:</text>
+<text class="code" x="80" y="231">— load() — useEffect inicial</text>
+<text class="code" x="80" y="248">— handleSubmit() / handleEdit() / handleDelete()</text>
+
+<line x1="340" y1="260" x2="340" y2="295" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text class="ts" x="370" y="282">importa</text>
+
+<!-- propietariosService -->
+<rect x="40" y="300" width="600" height="140" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1"/>
+<text class="th" x="60" y="325" fill="#085041">propietariosService</text>
+<text class="ts" x="60" y="343" fill="#0F6E56">services/propietarios.service.ts — capa intermedia</text>
+<line x1="60" y1="355" x2="620" y2="355" stroke="#0F6E56" stroke-width="0.3" opacity="0.4"/>
+<text class="code" x="60" y="375">findAll(): Promise&lt;Propietario[]&gt;</text>
+<text class="code" x="60" y="392">findOne(id: number): Promise&lt;Propietario&gt;</text>
+<text class="code" x="60" y="409">create(data): Promise&lt;Propietario&gt;</text>
+<text class="code" x="60" y="426">update(id, data) / remove(id)</text>
+
+<line x1="340" y1="440" x2="340" y2="475" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text class="ts" x="370" y="462">delega en</text>
+
+<!-- api lib/api.ts -->
+<rect x="40" y="480" width="600" height="160" rx="10" fill="#FAECE7" stroke="#993C1D" stroke-width="1"/>
+<text class="th" x="60" y="505" fill="#712B13">api (lib/api.ts)</text>
+<text class="ts" x="60" y="523" fill="#993C1D">Cliente HTTP centralizado · una sola URL base · errores legibles</text>
+<line x1="60" y1="535" x2="620" y2="535" stroke="#993C1D" stroke-width="0.3" opacity="0.4"/>
+<text class="code" x="60" y="555">BASE_URL = process.env.NEXT_PUBLIC_API_URL</text>
+<text class="code" x="60" y="575">apiGet&lt;T&gt;(path) — fetch GET, retorna json.data</text>
+<text class="code" x="60" y="592">apiPost&lt;T&gt;(path, body) — fetch POST con JSON</text>
+<text class="code" x="60" y="609">apiPut&lt;T&gt;(path, body) / apiDelete&lt;T&gt;(path)</text>
+<text class="code" x="60" y="626">extractErrorMessage() — lee message del 4xx/5xx</text>
+
+<line x1="340" y1="640" x2="340" y2="675" stroke="#5F5E5A" stroke-width="1.5" marker-end="url(#arrow)"/>
+<text class="ts" x="370" y="662">fetch HTTP</text>
+
+<!-- Backend node -->
+<rect x="140" y="680" width="400" height="50" rx="8" fill="#F1EFE8" stroke="#5F5E5A" stroke-width="0.5"/>
+<text class="th" x="340" y="703" text-anchor="middle" fill="#2C2C2A">Backend API · http://localhost:3001/api/v1</text>
+<text class="ts" x="340" y="720" text-anchor="middle" fill="#444441">REST endpoints — formato { statusCode, message, data }</text>
+</svg>
